@@ -1,7 +1,7 @@
 name: Add Updated to README
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - closed
     branches:
@@ -13,12 +13,17 @@ jobs:
 
     permissions:
       contents: write
-      pull-requests: write
+      # pull-requests: write
+      # pages: write
+      # id-token: write
 
     steps:
       - name: Checking out the repo
         uses: actions/checkout@v4
-
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          
       - name: Add updated to README
         run: |
           echo "" >> README.md
@@ -32,5 +37,5 @@ jobs:
             git config --global user.email "actions@github.com"
             git config --global user.name "GitHub Actions"
             git commit -am "Update README.md"
-            git push
+            git push origin main
           fi
